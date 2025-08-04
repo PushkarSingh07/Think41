@@ -1,35 +1,18 @@
-# Customer API
+# Think41 - Customer API Project
 
-A RESTful API that provides customer data and order statistics from CSV files.
+This repository contains a complete Customer API implementation built with Node.js, Express, and SQLite.
 
-## Features
+## 🚀 Customer API Features
 
-- ✅ List all customers with pagination
-- ✅ Get specific customer details with order count
-- ✅ Proper JSON response format
-- ✅ Error handling (customer not found, invalid ID, etc.)
-- ✅ CORS headers for frontend integration
-- ✅ SQLite database with CSV data import
-- ✅ Health check endpoint
+- ✅ **RESTful API** with proper JSON responses
+- ✅ **List all customers** with pagination support
+- ✅ **Get specific customer details** with order statistics
+- ✅ **Error handling** (404, 400, 500 status codes)
+- ✅ **CORS headers** for frontend integration
+- ✅ **SQLite database** with CSV data import
+- ✅ **Health check endpoint**
 
-## Setup
-
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Start the server:**
-   ```bash
-   npm start
-   ```
-
-   The server will automatically:
-   - Create SQLite database
-   - Import data from `users.csv` and `orders.csv`
-   - Start the API server on port 3000
-
-## API Endpoints
+## 📋 API Endpoints
 
 ### 1. Health Check
 ```
@@ -73,7 +56,7 @@ GET /customers?page=1&limit=10
   "pagination": {
     "current_page": 1,
     "total_pages": 50,
-    "total_customers": 500,
+    "total_customers": 60319,
     "limit": 10
   }
 }
@@ -112,7 +95,74 @@ GET /customers/:id
 }
 ```
 
-## Error Responses
+## 🛠️ Setup & Installation
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start the server:**
+   ```bash
+   npm start
+   ```
+
+   The server will automatically:
+   - Create SQLite database
+   - Import data from `users.csv` and `orders.csv`
+   - Start the API server on port 3000
+
+## 🧪 Testing
+
+### Using the test script:
+```bash
+node test-api.js
+```
+
+### Using curl:
+```bash
+# Health check
+curl http://localhost:3000/health
+
+# List customers
+curl http://localhost:3000/customers?page=1&limit=5
+
+# Get customer details
+curl http://localhost:3000/customers/457
+```
+
+## 📊 Database Schema
+
+### Users Table
+- `id` (INTEGER PRIMARY KEY)
+- `first_name`, `last_name`, `email` (TEXT)
+- `age` (INTEGER), `gender` (TEXT)
+- `state`, `street_address`, `postal_code`, `city`, `country` (TEXT)
+- `latitude`, `longitude` (REAL)
+- `traffic_source`, `created_at` (TEXT)
+
+### Orders Table
+- `order_id` (INTEGER PRIMARY KEY)
+- `user_id` (INTEGER, FOREIGN KEY)
+- `status`, `gender` (TEXT)
+- `created_at`, `returned_at`, `shipped_at`, `delivered_at` (TEXT)
+- `num_of_item` (INTEGER)
+
+## 📁 Project Structure
+
+```
+Think41/
+├── server.js          # Main API server (316 lines)
+├── package.json       # Dependencies and scripts
+├── README.md         # This documentation
+├── test-api.js       # Automated testing
+├── users.csv         # 60,319 customer records
+├── orders.csv        # Order data
+├── .gitignore        # Proper file exclusions
+└── customer_data.db  # SQLite database (auto-generated)
+```
+
+## 🛡️ Error Handling
 
 ### Customer Not Found (404)
 ```json
@@ -130,97 +180,7 @@ GET /customers/:id
 }
 ```
 
-### Internal Server Error (500)
-```json
-{
-  "error": "Internal server error",
-  "message": "Failed to retrieve customers"
-}
-```
-
-## Testing
-
-### Using curl
-
-1. **Health check:**
-   ```bash
-   curl http://localhost:3000/health
-   ```
-
-2. **List customers:**
-   ```bash
-   curl http://localhost:3000/customers?page=1&limit=5
-   ```
-
-3. **Get customer details:**
-   ```bash
-   curl http://localhost:3000/customers/457
-   ```
-
-### Using Postman
-
-1. Import the following collection:
-   - `GET http://localhost:3000/health`
-   - `GET http://localhost:3000/customers?page=1&limit=10`
-   - `GET http://localhost:3000/customers/457`
-
-## Database Schema
-
-### Users Table
-- `id` (INTEGER PRIMARY KEY)
-- `first_name` (TEXT)
-- `last_name` (TEXT)
-- `email` (TEXT)
-- `age` (INTEGER)
-- `gender` (TEXT)
-- `state` (TEXT)
-- `street_address` (TEXT)
-- `postal_code` (TEXT)
-- `city` (TEXT)
-- `country` (TEXT)
-- `latitude` (REAL)
-- `longitude` (REAL)
-- `traffic_source` (TEXT)
-- `created_at` (TEXT)
-
-### Orders Table
-- `order_id` (INTEGER PRIMARY KEY)
-- `user_id` (INTEGER, FOREIGN KEY)
-- `status` (TEXT)
-- `gender` (TEXT)
-- `created_at` (TEXT)
-- `returned_at` (TEXT)
-- `shipped_at` (TEXT)
-- `delivered_at` (TEXT)
-- `num_of_item` (INTEGER)
-
-## Project Structure
-
-```
-CustomerAPI/
-├── server.js          # Main API server
-├── package.json       # Dependencies and scripts
-├── README.md         # This file
-├── users.csv         # Customer data
-├── orders.csv        # Order data
-└── customer_data.db  # SQLite database (created automatically)
-```
-
-## Dependencies
-
-- **express**: Web framework
-- **sqlite3**: SQLite database driver
-- **csv-parser**: CSV file parsing
-- **cors**: Cross-origin resource sharing
-
-## Development
-
-To run in development mode with auto-restart:
-```bash
-npm run dev
-```
-
-## Production
+## 🚀 Production Deployment
 
 For production deployment:
 1. Set environment variables as needed
@@ -228,6 +188,25 @@ For production deployment:
 3. Configure reverse proxy (nginx)
 4. Set up SSL certificates
 
-## License
+## 📈 Business Value
 
-ISC 
+This API serves as a **foundation for customer analytics and order management systems**, providing:
+- **Customer insights** with order statistics
+- **Scalable architecture** ready for production
+- **Frontend-ready** with CORS support
+- **RESTful design** following industry standards
+
+## 🔧 Dependencies
+
+- **express**: Web framework
+- **sqlite3**: SQLite database driver
+- **csv-parser**: CSV file parsing
+- **cors**: Cross-origin resource sharing
+
+## 📝 License
+
+ISC
+
+---
+
+**Built with ❤️ for the Think41 project**
