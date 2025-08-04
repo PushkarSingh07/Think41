@@ -95,6 +95,121 @@ GET /customers/:id
 }
 ```
 
+### 4. Get Customer Orders
+```
+GET /customers/:customerId/orders?page=1&limit=10
+```
+
+**Query Parameters:**
+- `page` (optional): Page number (default: 1)
+- `limit` (optional): Number of orders per page (default: 10)
+
+**Response:**
+```json
+{
+  "customer": {
+    "id": 457,
+    "first_name": "Timothy",
+    "last_name": "Bush"
+  },
+  "orders": [
+    {
+      "order_id": 8,
+      "user_id": 457,
+      "status": "Cancelled",
+      "gender": "F",
+      "created_at": "2022-10-20 10:03:00+00:00",
+      "returned_at": null,
+      "shipped_at": null,
+      "delivered_at": null,
+      "num_of_item": 3,
+      "first_name": "Timothy",
+      "last_name": "Bush",
+      "email": "timothybush@example.net"
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 1,
+    "total_orders": 3,
+    "limit": 10
+  }
+}
+```
+
+### 5. Get Order Details
+```
+GET /orders/:orderId
+```
+
+**Response:**
+```json
+{
+  "order": {
+    "order_id": 8,
+    "user_id": 457,
+    "status": "Cancelled",
+    "gender": "F",
+    "created_at": "2022-10-20 10:03:00+00:00",
+    "returned_at": null,
+    "shipped_at": null,
+    "delivered_at": null,
+    "num_of_item": 3,
+    "customer": {
+      "id": 457,
+      "first_name": "Timothy",
+      "last_name": "Bush",
+      "email": "timothybush@example.net",
+      "age": 65,
+      "state": "Acre",
+      "city": "Rio Branco",
+      "country": "Brasil"
+    }
+  }
+}
+```
+
+### 6. Get All Orders
+```
+GET /orders?page=1&limit=10&status=Cancelled
+```
+
+**Query Parameters:**
+- `page` (optional): Page number (default: 1)
+- `limit` (optional): Number of orders per page (default: 10)
+- `status` (optional): Filter by order status (e.g., "Cancelled", "Delivered")
+
+**Response:**
+```json
+{
+  "orders": [
+    {
+      "order_id": 8,
+      "user_id": 457,
+      "status": "Cancelled",
+      "gender": "F",
+      "created_at": "2022-10-20 10:03:00+00:00",
+      "returned_at": null,
+      "shipped_at": null,
+      "delivered_at": null,
+      "num_of_item": 3,
+      "first_name": "Timothy",
+      "last_name": "Bush",
+      "email": "timothybush@example.net"
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 100,
+    "total_orders": 1000,
+    "limit": 10
+  },
+  "filters": {
+    "status": "Cancelled"
+  }
+}
+```
+
 ## 🛠️ Setup & Installation
 
 1. **Install dependencies:**
@@ -114,9 +229,13 @@ GET /customers/:id
 
 ## 🧪 Testing
 
-### Using the test script:
+### Using the test scripts:
 ```bash
+# Test Customer API
 node test-api.js
+
+# Test Orders API
+node test-orders-api.js
 ```
 
 ### Using curl:
@@ -129,6 +248,18 @@ curl http://localhost:3000/customers?page=1&limit=5
 
 # Get customer details
 curl http://localhost:3000/customers/457
+
+# Get customer orders
+curl http://localhost:3000/customers/457/orders
+
+# Get all orders
+curl http://localhost:3000/orders?page=1&limit=5
+
+# Get order details
+curl http://localhost:3000/orders/8
+
+# Get orders with status filter
+curl http://localhost:3000/orders?status=Cancelled&page=1&limit=5
 ```
 
 ## 📊 Database Schema
@@ -152,10 +283,11 @@ curl http://localhost:3000/customers/457
 
 ```
 Think41/
-├── server.js          # Main API server (316 lines)
+├── server.js          # Main API server (500+ lines)
 ├── package.json       # Dependencies and scripts
 ├── README.md         # This documentation
-├── test-api.js       # Automated testing
+├── test-api.js       # Customer API testing
+├── test-orders-api.js # Orders API testing
 ├── users.csv         # 60,319 customer records
 ├── orders.csv        # Order data
 ├── .gitignore        # Proper file exclusions

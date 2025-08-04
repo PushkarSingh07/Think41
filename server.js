@@ -257,6 +257,252 @@ app.get('/customers/:id', (req, res) => {
     });
 });
 
+// ORDERS API ENDPOINTS
+
+// GET /customers/:customerId/orders - Get all orders for a specific customer
+app.get('/customers/:customerId/orders', (req, res) => {
+    const customerId = parseInt(req.params.customerId);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    if (isNaN(customerId)) {
+        return res.status(400).json({
+            error: 'Invalid customer ID',
+            message: 'Customer ID must be a valid number'
+        });
+    }
+
+    // First check if customer exists
+    db.get("SELECT id, first_name, last_name FROM users WHERE id = ?", [customerId], (err, customer) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({
+                error: 'Internal server error',
+                message: 'Failed to check customer existence'
+            });
+        }
+
+        if (!customer) {
+            return res.status(404).json({
+                error: 'Customer not found',
+                message: `Customer with ID ${customerId} does not exist`
+            });
+        }
+
+        // Get orders for the customer
+        const query = `
+            SELECT 
+                o.order_id,
+                o.user_id,
+                o.status,
+                o.gender,
+                o.created_at,
+                o.returned_at,
+                o.shipped_at,
+                o.delivered_at,
+                o.num_of_item,
+                u.first_name,
+                u.last_name,
+                u.email
+            FROM orders o
+            LEFT JOIN users u ON o.user_id = u.id
+            WHERE o.user_id = ?
+            ORDER BY o.created_at DESC
+            LIMIT ? OFFSET ?
+        `;
+
+        db.all(query, [customerId, limit, offset], (err, orders) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({
+                    error: 'Internal server error',
+                    message: 'Failed to retrieve orders'
+                });
+            }
+
+            // Get total count for pagination
+            db.get("SELECT COUNT(*) as total FROM orders WHERE user_id = ?", [customerId], (err, countRow) => {
+                if (err) {
+                    return res.status(500).json({
+                        error: 'Internal server error',
+                        message: 'Failed to get total count'
+                    });
+                }
+
+                const totalPages = Math.ceil(countRow.total / limit);
+                
+                res.json({
+                    customer: {
+                        id: customer.id,
+                        first_name: customer.first_name,
+                        last_name: customer.last_name
+                    },
+                    orders: orders,
+                    pagination: {
+                        current_page: page,
+                        total_pages: totalPages,
+                        total_orders: countRow.total,
+                        limit: limit
+                    }
+                });
+            });
+        });
+    });
+});
+
+// GET /orders/:orderId - Get specific order details
+app.get('/orders/:orderId', (req, res) => {
+    const orderId = parseInt(req.params.orderId);
+
+    if (isNaN(orderId)) {
+        return res.status(400).json({
+            error: 'Invalid order ID',
+            message: 'Order ID must be a valid number'
+        });
+    }
+
+    const query = `
+        SELECT 
+            o.order_id,
+            o.user_id,
+            o.status,
+            o.gender,
+            o.created_at,
+            o.returned_at,
+            o.shipped_at,
+            o.delivered_at,
+            o.num_of_item,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.age,
+            u.state,
+            u.city,
+            u.country
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        WHERE o.order_id = ?
+    `;
+
+    db.get(query, [orderId], (err, order) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({
+                error: 'Internal server error',
+                message: 'Failed to retrieve order details'
+            });
+        }
+
+        if (!order) {
+            return res.status(404).json({
+                error: 'Order not found',
+                message: `Order with ID ${orderId} does not exist`
+            });
+        }
+
+        res.json({
+            order: {
+                order_id: order.order_id,
+                user_id: order.user_id,
+                status: order.status,
+                gender: order.gender,
+                created_at: order.created_at,
+                returned_at: order.returned_at,
+                shipped_at: order.shipped_at,
+                delivered_at: order.delivered_at,
+                num_of_item: order.num_of_item,
+                customer: {
+                    id: order.user_id,
+                    first_name: order.first_name,
+                    last_name: order.last_name,
+                    email: order.email,
+                    age: order.age,
+                    state: order.state,
+                    city: order.city,
+                    country: order.country
+                }
+            }
+        });
+    });
+});
+
+// GET /orders - Get all orders with pagination and optional filtering
+app.get('/orders', (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status; // Optional filter by status
+    const offset = (page - 1) * limit;
+
+    let query = `
+        SELECT 
+            o.order_id,
+            o.user_id,
+            o.status,
+            o.gender,
+            o.created_at,
+            o.returned_at,
+            o.shipped_at,
+            o.delivered_at,
+            o.num_of_item,
+            u.first_name,
+            u.last_name,
+            u.email
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+    `;
+
+    let countQuery = "SELECT COUNT(*) as total FROM orders";
+    let params = [];
+    let countParams = [];
+
+    // Add status filter if provided
+    if (status) {
+        query += " WHERE o.status = ?";
+        countQuery += " WHERE status = ?";
+        params.push(status);
+        countParams.push(status);
+    }
+
+    query += " ORDER BY o.created_at DESC LIMIT ? OFFSET ?";
+    params.push(limit, offset);
+
+    db.all(query, params, (err, orders) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({
+                error: 'Internal server error',
+                message: 'Failed to retrieve orders'
+            });
+        }
+
+        // Get total count for pagination
+        db.get(countQuery, countParams, (err, countRow) => {
+            if (err) {
+                return res.status(500).json({
+                    error: 'Internal server error',
+                    message: 'Failed to get total count'
+                });
+            }
+
+            const totalPages = Math.ceil(countRow.total / limit);
+            
+            res.json({
+                orders: orders,
+                pagination: {
+                    current_page: page,
+                    total_pages: totalPages,
+                    total_orders: countRow.total,
+                    limit: limit
+                },
+                filters: {
+                    status: status || null
+                }
+            });
+        });
+    });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 
@@ -289,10 +535,13 @@ async function startServer() {
         await initializeDatabase();
         
         app.listen(PORT, () => {
-            console.log(`🚀 Customer API server running on port ${PORT}`);
+            console.log(`🚀 Customer & Orders API server running on port ${PORT}`);
             console.log(`📊 Health check: http://localhost:${PORT}/health`);
             console.log(`👥 Customers: http://localhost:${PORT}/customers`);
             console.log(`👤 Customer details: http://localhost:${PORT}/customers/:id`);
+            console.log(`📦 Customer orders: http://localhost:${PORT}/customers/:customerId/orders`);
+            console.log(`📋 All orders: http://localhost:${PORT}/orders`);
+            console.log(`📄 Order details: http://localhost:${PORT}/orders/:orderId`);
         });
     } catch (error) {
         console.error('Failed to start server:', error);
