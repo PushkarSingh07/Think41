@@ -18,6 +18,13 @@ This repository contains a complete Customer Management System built with Node.j
 - ✅ **SQLite database** with CSV data import
 - ✅ **Health check endpoint**
 
+
+<img width="1919" height="972" alt="image" src="https://github.com/user-attachments/assets/bcf724a1-0e31-49f1-8c3e-915ff4299862" />
+
+
+<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/eec9edc9-f550-430b-8755-823b10e6108f" />
+
+
 ## 📋 API Endpoints
 
 ### 1. Health Check
