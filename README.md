@@ -4,19 +4,12 @@ This repository contains a complete Customer Management System built with Node.j
 
 ## 🌐 Project Overview
 
-- **Backend**: RESTful API built with Express and SQLite
-- **Frontend**: React application for customer management
-- **Data**: Customer and order information stored in SQLite database
+This project was developed in four key milestones:
 
-## 🚀 Customer API Features
-
-- ✅ **RESTful API** with proper JSON responses
-- ✅ **List all customers** with pagination support
-- ✅ **Get specific customer details** with order statistics
-- ✅ **Error handling** (404, 400, 500 status codes)
-- ✅ **CORS headers** for frontend integration
-- ✅ **SQLite database** with CSV data import
-- ✅ **Health check endpoint**
+1. **Database Design & Data Loading**: SQLite database setup with customer and order data
+2. **Customer API**: RESTful endpoints for customer information
+3. **Orders API**: RESTful endpoints for order management
+4. **Frontend Implementation**: React UI for customer list and search
 
 
 <img width="1919" height="972" alt="image" src="https://github.com/user-attachments/assets/bcf724a1-0e31-49f1-8c3e-915ff4299862" />
@@ -24,6 +17,31 @@ This repository contains a complete Customer Management System built with Node.j
 
 <img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/eec9edc9-f550-430b-8755-823b10e6108f" />
 
+
+## �️ Milestone 1: Database Design & Data Loading
+
+- ✅ **Database Setup**: SQLite database configuration
+- ✅ **Schema Design**: Tables for users and orders with appropriate relationships
+- ✅ **Data Import**: Loading data from users.csv and orders.csv files
+- ✅ **Data Validation**: Ensuring data integrity during import
+- ✅ **Relationship Modeling**: Foreign key constraints between users and orders
+
+## 🚀 Milestone 2: Customer API
+
+- ✅ **RESTful API** with proper JSON responses
+- ✅ **List all customers** with pagination support
+- ✅ **Get specific customer details** including order count
+- ✅ **Error handling** (404, 400, 500 status codes)
+- ✅ **CORS headers** for frontend integration
+- ✅ **Health check endpoint**
+
+## 📦 Milestone 3: Orders API
+
+- ✅ **Get all orders** for a specific customer
+- ✅ **Get specific order details** with complete information
+- ✅ **Filter orders** by status and other criteria
+- ✅ **Proper error handling** for order-related requests
+- ✅ **Customer-order relationship** management
 
 ## 📋 API Endpoints
 
@@ -225,6 +243,26 @@ GET /orders?page=1&limit=10&status=Cancelled
 
 ## 🛠️ Setup & Installation
 
+### Complete Setup (Backend & Frontend)
+
+1. **Run the setup script:**
+   ```bash
+   setup.bat
+   ```
+   
+   This will install both backend and frontend dependencies.
+
+2. **Start both the API and frontend:**
+   ```bash
+   npm run dev-all
+   ```
+
+   This starts:
+   - Backend API server on port 3000
+   - Frontend development server on port 3001
+
+### Backend Only
+
 1. **Install dependencies:**
    ```bash
    npm install
@@ -335,7 +373,7 @@ For production deployment:
 
 ## 📈 Business Value
 
-This API serves as a **foundation for customer analytics and order management systems**, providing:
+This project serves as a **foundation for customer analytics and order management systems**, providing:
 - **Customer insights** with order statistics
 - **Scalable architecture** ready for production
 - **Frontend-ready** with CORS support
@@ -348,7 +386,7 @@ This API serves as a **foundation for customer analytics and order management sy
 - **csv-parser**: CSV file parsing
 - **cors**: Cross-origin resource sharing
 
-## �️ Frontend Implementation
+## 🖥️ Milestone 4: Frontend Implementation
 
 The project includes a React frontend for customer management:
 
@@ -361,7 +399,7 @@ The project includes a React frontend for customer management:
 - ✅ **Pagination**: Navigate through large customer lists
 - ✅ **Loading States**: Visual feedback during API requests
 
-### Setup Instructions
+### Frontend Setup
 
 1. Install frontend dependencies:
    ```
@@ -380,23 +418,24 @@ The project includes a React frontend for customer management:
 Run both the backend API and frontend concurrently with:
 
 ```
-npm install -g concurrently
 npm run dev-all
 ```
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 CustomerAPIThink41/
 │
-├── server.js              # Main API server
-├── customer_data.db       # SQLite database
+├── server.js              # Main API server with all endpoints
+├── customer_data.db       # SQLite database (Milestone 1)
 ├── ecommerce.db           # SQLite database
 ├── load_data.py           # Script to load data into database
 ├── orders.csv             # Sample orders data
 ├── users.csv              # Sample users data
+├── test-api.js            # Test script for Customer API (Milestone 2)
+├── test-orders-api.js     # Test script for Orders API (Milestone 3)
 │
-├── frontend/              # React frontend application
+├── frontend/              # React frontend application (Milestone 4)
 │   ├── public/            # Public assets
 │   └── src/               # React source code
 │       ├── components/    # React components
@@ -405,10 +444,13 @@ CustomerAPIThink41/
 │       └── index.js
 ```
 
-## �📝 License
+## 📝 License
 
 ISC
 
 ---
 
 **Built with ❤️ for the Think41 project**
+
+
+
