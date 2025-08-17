@@ -1,11 +1,15 @@
 {
   "name": "customerapi",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Customer API and Frontend for Think41",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "frontend": "cd frontend && npm start",
+    "install-frontend": "cd frontend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "dev-all": "concurrently \"npm run dev\" \"npm run frontend\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,5 +21,8 @@
     "csv-parser": "^3.2.0",
     "express": "^5.1.0",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

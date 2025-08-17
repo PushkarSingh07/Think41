@@ -503,6 +503,23 @@ app.get('/orders', (req, res) => {
     });
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Welcome to Customer & Orders API',
+        version: '1.0.0',
+        endpoints: {
+            health: '/health',
+            customers: '/customers',
+            customer_details: '/customers/:id',
+            customer_orders: '/customers/:customerId/orders',
+            orders: '/orders',
+            order_details: '/orders/:orderId'
+        },
+        documentation: 'Check the README.md for detailed API documentation'
+    });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 

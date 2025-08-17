@@ -1,6 +1,12 @@
-# Think41 - Customer API Project
+# Think41 - Customer Management System
 
-This repository contains a complete Customer API implementation built with Node.js, Express, and SQLite.
+This repository contains a complete Customer Management System built with Node.js, Express, SQLite, and React.
+
+## 🌐 Project Overview
+
+- **Backend**: RESTful API built with Express and SQLite
+- **Frontend**: React application for customer management
+- **Data**: Customer and order information stored in SQLite database
 
 ## 🚀 Customer API Features
 
@@ -335,7 +341,64 @@ This API serves as a **foundation for customer analytics and order management sy
 - **csv-parser**: CSV file parsing
 - **cors**: Cross-origin resource sharing
 
-## 📝 License
+## �️ Frontend Implementation
+
+The project includes a React frontend for customer management:
+
+### Features
+- ✅ **Customer List View**: Displays all customers in a card format
+- ✅ **Search Functionality**: Search customers by name or email
+- ✅ **Customer Summary**: Shows customer name, email, and order count
+- ✅ **API Integration**: Fetches data from the Customer API endpoints
+- ✅ **Responsive Design**: Works on desktop and mobile devices
+- ✅ **Pagination**: Navigate through large customer lists
+- ✅ **Loading States**: Visual feedback during API requests
+
+### Setup Instructions
+
+1. Install frontend dependencies:
+   ```
+   npm run install-frontend
+   ```
+
+2. Start the frontend development server:
+   ```
+   npm run frontend
+   ```
+   
+   The frontend will be available at http://localhost:3001
+
+### Running Both Backend and Frontend
+
+Run both the backend API and frontend concurrently with:
+
+```
+npm install -g concurrently
+npm run dev-all
+```
+
+## Project Structure
+
+```
+CustomerAPIThink41/
+│
+├── server.js              # Main API server
+├── customer_data.db       # SQLite database
+├── ecommerce.db           # SQLite database
+├── load_data.py           # Script to load data into database
+├── orders.csv             # Sample orders data
+├── users.csv              # Sample users data
+│
+├── frontend/              # React frontend application
+│   ├── public/            # Public assets
+│   └── src/               # React source code
+│       ├── components/    # React components
+│       │   └── CustomerList.js
+│       ├── App.js
+│       └── index.js
+```
+
+## �📝 License
 
 ISC
 
